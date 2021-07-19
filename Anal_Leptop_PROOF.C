@@ -48,7 +48,7 @@ void Anal_Leptop_PROOF::SlaveBegin(TTree * /*tree*/)
   Tout->Branch("event_pt_weight",&event_pt_weight,"event_pt_weight/F");
   Tout->Branch("weight",&weight,"weight/F");
   
-  char name[1000];
+  /*   char name[1000];
   
   for(int binit=0; binit<6; binit++){
     char bnamein[1000]; 
@@ -58,8 +58,9 @@ void Anal_Leptop_PROOF::SlaveBegin(TTree * /*tree*/)
     hist_binit[binit] = new TH1D(bnamein,btitlein,ini_bnbins[binit],ini_blow[binit],ini_bup[binit]);
     hist_binit[binit]->Sumw2();
   }
-  
-  for(int i=0;i<3;i++)
+  */
+
+  for(int i=0;i<6;i++)
     {
       char namein[1000];
       char titlein[1000];
@@ -68,8 +69,29 @@ void Anal_Leptop_PROOF::SlaveBegin(TTree * /*tree*/)
       hist_nbjetR[i] = new TH1D(namein,titlein,nbjetR_nbins[i],nbjetR_low[i],nbjetR_up[i]);
       hist_nbjetR[i]->Sumw2();
     }
+  
+  //gProofServ->SendAsynMessage("Check start 0");  
+   for(int i=0;i<6;i++)
+    {
+      char namein[1000];
+      char titlein[1000];
+      sprintf(namein,"%s",nlepR_names[i]);
+      sprintf(titlein,"%s",nlepR_title[i]);
+      hist_nlepR[i] = new TH1D(namein,titlein,nlepR_nbins[i],nlepR_low[i],nlepR_up[i]);
+      hist_nlepR[i]->Sumw2();
+    }
 
-  for(int i=0;i<26;i++)
+ for(int i=0;i<3;i++)
+    {
+      char namein[1000];
+      char titlein[1000];
+      sprintf(namein,"%s",minmatchedR_names[i]);
+      sprintf(titlein,"%s",minmatchedR_title[i]);
+      hist_minmatchedR[i] = new TH1D(namein,titlein,minmatchedR_nbins[i],minmatchedR_low[i],minmatchedR_up[i]);
+      hist_minmatchedR[i]->Sumw2();
+    }
+
+  for(int i=0;i<28;i++)
     {
       char namein[1000];
       char titlein[1000];
@@ -78,14 +100,14 @@ void Anal_Leptop_PROOF::SlaveBegin(TTree * /*tree*/)
       hist_new_var[i] = new TH1D(namein,titlein,new_var_nbins[i],new_var_low[i],new_var_up[i]);
       hist_new_var[i]->Sumw2();
     }
-  hist_2D_gendeltaRvstoppt = new TH2D("h2d_deltaRvstoppt","#DeltaR(gen b,gen lep) vs pt of gen top",100,0,6.5,35,0,1000);
-  hist_2D_gendeltaRvstoppt->Sumw2();
-  hist_2D_gendeltaRvsantitoppt = new TH2D("h2d_deltaRvsantitoppt","#DeltaR(gen b,gen lep) vs pt of gen antitop",100,0,6.5,35,0,1000); 
-  hist_2D_gendeltaRvsantitoppt->Sumw2();
-  hist_2D_gendeltaRvsbothtoppt = new TH2D("h2d_deltaRvsbothtoppt","#DeltaR(gen b,gen lep) vs pt of all gen top",100,0,6.5,35,0,1000);
-  hist_2D_gendeltaRvsbothtoppt->Sumw2();
+  hist_2D_gendeltaRblepvstoppt = new TH2D("hist_2D_gendeltaRblepvstoppt","#DeltaR(gen b,gen lep) vs pt of gen top",35,0,1000,50,0,6.5);
+  hist_2D_gendeltaRblepvstoppt->Sumw2();
+  hist_2D_gendeltaRbtopvstoppt = new TH2D("hist_2D_gendeltaRbtopvstoppt","#DeltaR(gen b,gen top) vs pt of gen top",35,0,1000,50,0,6.5); 
+  hist_2D_gendeltaRbtopvstoppt->Sumw2();
+  hist_2D_gendeltaRleptopvstoppt = new TH2D("hist_2D_gendeltaRleptopvstoppt","#DeltaR(gen top,gen lep) vs pt of gen top",35,0,1000,50,0,6.5);
+  hist_2D_gendeltaRleptopvstoppt->Sumw2();
     
-  for(int init=0; init<18; init++){
+  /*  for(int init=0; init<18; init++){
     char namein[1000], nameinup[1000], nameindown[1000];
     char titlein[1000];
     
@@ -205,7 +227,7 @@ void Anal_Leptop_PROOF::SlaveBegin(TTree * /*tree*/)
   reader2->BookMVA("BDTG method", weightfile2);
   */
 
-  reader3 = new TMVA::Reader( "BDTG_Rt" );
+  /*  reader3 = new TMVA::Reader( "BDTG_Rt" );
   reader3->AddVariable( "selpfjetAK8NHadF", &in_pfjetAK8NHadF);
   reader3->AddVariable( "selpfjetAK8neunhadfrac", &in_pfjetAK8neunhadfrac);
   reader3->AddVariable( "selpfjetAK8subhaddiff", &in_pfjetAK8subhaddiff);
@@ -237,7 +259,7 @@ void Anal_Leptop_PROOF::SlaveBegin(TTree * /*tree*/)
   reader4->AddVariable("selpfjetAK8muinsubinvmass", &in_pfjetAK8muinsubinvmass);
   reader4->AddVariable("selpfjetAK8muinsubIfarbyI0", &in_pfjetAK8muinsubIfarbyI0);
   reader4->AddVariable("selpfjetAK8muinsubInearbyI0", &in_pfjetAK8muinsubInearbyI0);
-  reader4->BookMVA("BDTG method", weightfile4);
+  reader4->BookMVA("BDTG method", weightfile4);*/
 }
 
 Bool_t Anal_Leptop_PROOF::Process(Long64_t entry)
@@ -266,8 +288,9 @@ Bool_t Anal_Leptop_PROOF::Process(Long64_t entry)
   }else{
     weight = 1;
   }
+  // gProofServ->SendAsynMessage("Check start");
   Tout->Fill();
-  //  gProofServ->SendAsynMessage("Check start");
+
   int ngenelc = 0;
   int ngenmu = 0;
   int ngentau = 0;
@@ -641,39 +664,47 @@ Bool_t Anal_Leptop_PROOF::Process(Long64_t entry)
 
     // Plotting the new variables 
 
-    if(top_igen>-1 && top_blep[1] >-1 && top_blep[0]>-1)  hist_2D_gendeltaRvstoppt->Fill(delta2R(genparteta[top_blep[1]],genpartphi[top_blep[1]],genparteta[top_blep[0]],genpartphi[top_blep[0]]),genpartpt[top_igen],weight); //For vs top only
-    if(antitop_igen>-1 && antitop_blep[1] >-1 && antitop_blep[0]>-1)  hist_2D_gendeltaRvsantitoppt->Fill(delta2R(genparteta[antitop_blep[1]],genpartphi[antitop_blep[1]],genparteta[antitop_blep[0]],genpartphi[antitop_blep[0]]),genpartpt[antitop_igen],weight); //For vs antitop only
+    if(top_igen>-1 && top_blep[1] >-1 && top_blep[0]>-1)
+      {
+	hist_2D_gendeltaRblepvstoppt->Fill(genpartpt[top_igen],delta2R(genparteta[top_blep[1]],genpartphi[top_blep[1]],genparteta[top_blep[0]],genpartphi[top_blep[0]]),weight); 
+	hist_2D_gendeltaRbtopvstoppt->Fill(genpartpt[top_igen],delta2R(genparteta[top_igen],genpartphi[top_igen],genparteta[top_blep[0]],genpartphi[top_blep[0]]),weight);
+	hist_2D_gendeltaRleptopvstoppt->Fill(genpartpt[top_igen],delta2R(genparteta[top_blep[1]],genpartphi[top_blep[1]],genparteta[top_igen],genpartphi[top_igen]),weight);
+      }
 
-    //For vs top and antitop
-    if(top_igen>-1 && top_blep[1] >-1 && top_blep[0]>-1)  hist_2D_gendeltaRvsbothtoppt->Fill(delta2R(genparteta[top_blep[1]],genpartphi[top_blep[1]],genparteta[top_blep[0]],genpartphi[top_blep[0]]),genpartpt[top_igen],weight);
-    if(antitop_igen>-1 && antitop_blep[1] >-1 && antitop_blep[0]>-1)  hist_2D_gendeltaRvsbothtoppt->Fill(delta2R(genparteta[antitop_blep[1]],genpartphi[antitop_blep[1]],genparteta[antitop_blep[0]],genpartphi[antitop_blep[0]]),genpartpt[antitop_igen],weight);
+    
+    if(antitop_igen>-1 && antitop_blep[1] >-1 && antitop_blep[0]>-1)
+      {
+	hist_2D_gendeltaRblepvstoppt->Fill(genpartpt[antitop_igen],delta2R(genparteta[antitop_blep[1]],genpartphi[antitop_blep[1]],genparteta[antitop_blep[0]],genpartphi[antitop_blep[0]]),weight); 
+	hist_2D_gendeltaRbtopvstoppt->Fill(genpartpt[antitop_igen],delta2R(genparteta[antitop_igen],genpartphi[antitop_igen],genparteta[antitop_blep[0]],genpartphi[antitop_blep[0]]),weight); 
+	hist_2D_gendeltaRleptopvstoppt->Fill(genpartpt[antitop_igen],delta2R(genparteta[antitop_blep[1]],genpartphi[antitop_blep[1]],genparteta[antitop_igen],genpartphi[antitop_igen]),weight); 
+      }
     
     
-    if(leadgenjetak8.Pt()>300 && leadgenjetak4.Pt()>0.00001)
+    if(leadgenjetak8.Pt()>300 && leadgenjetak4.Pt()>0.001 && genpartpt[antitop_igen]>300 && genpartpt[top_igen]>300)
       {
 	hist_new_var[4]->Fill(htsum,weight);
 	hist_new_var[0]->Fill(GENMET,weight);
 
 	hist_new_var[3]->Fill(GENMETPhi,weight);
-	if(genlep1.Pt() >0.00001)  hist_new_var[1]->Fill(genlep1.Phi(),weight);  /// if(genlep1.Pt() >0.00001) correspond to condition that lep should be present in event (not the initialized lep with 0 pt)
-	if(genlep1.Pt() >0.00001) hist_new_var[5]->Fill(genlep1.Pt(),weight);
-	if(genlep2.Pt() >0.00001) hist_new_var[2]->Fill(genlep2.Phi(),weight);
-	if(genlep2.Pt() >0.00001) hist_new_var[6]->Fill(genlep2.Pt(),weight);
+	if(genlep1.Pt() >0.001)  hist_new_var[1]->Fill(genlep1.Phi(),weight);  /// if(genlep1.Pt() >0.001) correspond to condition that lep should be present in event (not the initialized lep with 0 pt)
+	if(genlep1.Pt() >0.001) hist_new_var[5]->Fill(genlep1.Pt(),weight);
+	if(genlep2.Pt() >0.001) hist_new_var[2]->Fill(genlep2.Phi(),weight);
+	if(genlep2.Pt() >0.001) hist_new_var[6]->Fill(genlep2.Pt(),weight);
 	hist_new_var[7]->Fill(leadgenjetak4.Pt(),weight);
-	if(leadgenb.Pt() > 0.00001) hist_new_var[8]->Fill(leadgenb.Pt(),weight);
-	if(genlep1.Pt() >0.00001) hist_new_var[9]->Fill( PhiInRange(GENMETPhi - genlep1.Phi()) ,weight);
+	if(leadgenb.Pt() > 0.001) hist_new_var[8]->Fill(leadgenb.Pt(),weight);
+	if(genlep1.Pt() >0.001) hist_new_var[9]->Fill( PhiInRange(GENMETPhi - genlep1.Phi()) ,weight);
 	double mtlep1;
 	mtlep1=sqrt( 2.0*genlep1.Pt()*GENMET*(1 - cos(GENMETPhi - genlep1.Phi()) ) );
-	if(genlep1.Pt() >0.00001) hist_new_var[13]->Fill(mtlep1,weight);
-	if(genlep2.Pt() >0.00001) hist_new_var[10]->Fill( PhiInRange(GENMETPhi - genlep2.Phi()) ,weight);
+	if(genlep1.Pt() >0.001) hist_new_var[13]->Fill(mtlep1,weight);
+	if(genlep2.Pt() >0.001) hist_new_var[10]->Fill( PhiInRange(GENMETPhi - genlep2.Phi()) ,weight);
 	double mtlep2;
 	mtlep2=sqrt( 2.0*genlep2.Pt()*GENMET*(1 - cos(GENMETPhi - genlep2.Phi()) ) );
-	if(genlep2.Pt() >0.00001) hist_new_var[14]->Fill(mtlep2,weight);
+	if(genlep2.Pt() >0.001) hist_new_var[14]->Fill(mtlep2,weight);
 	hist_new_var[11]->Fill( PhiInRange(GENMETPhi - leadgenjetak4.Phi()) ,weight);
 	double rm;
 	rm=GENMET/leadgenjetak4.Pt();
 	hist_new_var[15]->Fill(rm,weight);
-	if(leadgenb.Pt() > 0.00001) hist_new_var[12]->Fill( PhiInRange(GENMETPhi - leadgenb.Phi()) ,weight);
+	if(leadgenb.Pt() > 0.001) hist_new_var[12]->Fill( PhiInRange(GENMETPhi - leadgenb.Phi()) ,weight);
 	hist_new_var[16]->Fill(GENMET/htsum,weight);
 	hist_new_var[17]->Fill(GENMET/leadgenjetak8.Pt(),weight);
 
@@ -690,8 +721,8 @@ Bool_t Anal_Leptop_PROOF::Process(Long64_t entry)
 		inearestb=ib;
 	      }
 	  }
-	nearestb.SetPtEtaPhiM(genbpt[inearestb],genbeta[inearestb],genbphi[inearestb],genbm[inearestb]);
-	if(genlep1.Pt() >0.00001 && leadgenb.Pt() > 0.00001) hist_new_var[18]->Fill( PhiInRange(GENMETPhi - (genlep1 + nearestb).Phi()),weight);
+	if( inearestb > -1)   nearestb.SetPtEtaPhiM(genbpt[inearestb],genbeta[inearestb],genbphi[inearestb],genbm[inearestb]);
+	if(genlep1.Pt() >0.001 && leadgenb.Pt() > 0.001) hist_new_var[18]->Fill( PhiInRange(GENMETPhi - (genlep1 + nearestb).Phi()),weight);
 
 	inearestb=-10;
 	delRmintmp=100;
@@ -705,18 +736,33 @@ Bool_t Anal_Leptop_PROOF::Process(Long64_t entry)
 		inearestb=ib;
 	      }
 	  }
-	nearestb.SetPtEtaPhiM(genbpt[inearestb],genbeta[inearestb],genbphi[inearestb],genbm[inearestb]);
+	if( inearestb > -1) nearestb.SetPtEtaPhiM(genbpt[inearestb],genbeta[inearestb],genbphi[inearestb],genbm[inearestb]);
+	if(genlep2.Pt() >0.001 && leadgenb.Pt() > 0.001) hist_new_var[19]->Fill( PhiInRange(GENMETPhi - (genlep2 + nearestb).Phi()),weight);
 	
-	if(genlep2.Pt() >0.00001 && leadgenb.Pt() > 0.00001) hist_new_var[19]->Fill( PhiInRange(GENMETPhi - (genlep2 + nearestb).Phi()),weight);
 	hist_new_var[20]->Fill(ngenmuons + ngenelectrons + ngentaus,weight);
 	hist_new_var[21]->Fill(ngenjetAK4,weight);
 	hist_new_var[22]->Fill(ptsumak4.Pt(),weight);
-	if(genlep2.Pt() >0.00001 && genlep1.Pt() >0.00001)
+	if(genlep2.Pt() >0.001 && genlep1.Pt() >0.001)
 	  {
 	    hist_new_var[23]->Fill( genlep2.Pt()/genlep1.Pt(),weight);
 	    hist_new_var[24]->Fill(PhiInRange(genlep1.Phi() - genlep2.Phi()) ,weight);
 	    hist_new_var[25]->Fill( (genlep1 + genlep2).M() ,weight);
 	  }
+	hist_new_var[26]->Fill(ngenjetAK8,weight);
+	int nmatchedgenjetAK8=0;
+	for(int i=0; i<ngenjetAK8;i++)
+	  {
+	    float dR=1000.;
+	    for(int j=0;j<ngentops;j++)
+	      {
+		float Rtmp=delta2R(genjetAK8eta[i],genjetAK8phi[i],gentopeta[j],gentopphi[j]);
+		if(Rtmp<dR)
+		  dR=Rtmp;
+	      }
+	    if(dR<0.3)
+	      nmatchedgenjetAK8++;
+	  }
+	hist_new_var[27]->Fill(nmatchedgenjetAK8,weight);
       }
     }
   
@@ -758,7 +804,7 @@ Bool_t Anal_Leptop_PROOF::Process(Long64_t entry)
       pfjetAK4pt[ijet] *= (1+pfjetAK4reso[ijet]) ;
       pfjetAK4mass[ijet] *= (1+pfjetAK4reso[ijet]) ;
     }
-    if(pfjetAK4pt[ijet]<50.) continue;
+    if(pfjetAK4pt[ijet]<30.) continue;
     Event_HT += pfjetAK4pt[ijet];
     pfjetAK4pt[fjet] = pfjetAK4pt[ijet];
     pfjetAK4mass[fjet] = pfjetAK4mass[ijet];
@@ -769,7 +815,7 @@ Bool_t Anal_Leptop_PROOF::Process(Long64_t entry)
     pfjetAK4partonflav[fjet] = pfjetAK4partonflav[ijet];
     pfjetAK4btag_DeepFlav[fjet] = pfjetAK4btag_DeepFlav[ijet];
     
-    if(pfjetAK4btag_DeepFlav[fjet] > deep_btag_cut) {
+    /*    if(pfjetAK4btag_DeepFlav[fjet] > deep_btag_cut) {
       if(abs(pfjetAK4hadronflav[fjet])==5){  hist_2D_bpass_flavb->Fill(pfjetAK4pt[fjet],fabs(pfjetAK4eta[fjet]),weight); }
       if(abs(pfjetAK4hadronflav[fjet])==4){  hist_2D_bpass_flavc->Fill(pfjetAK4pt[fjet],fabs(pfjetAK4eta[fjet]),weight); }
       if(abs(pfjetAK4hadronflav[fjet])!=5 &&abs(pfjetAK4hadronflav[fjet])!=4){  
@@ -779,7 +825,7 @@ Bool_t Anal_Leptop_PROOF::Process(Long64_t entry)
     if(abs(pfjetAK4hadronflav[fjet])==5){ hist_2D_ball_flavb->Fill(pfjetAK4pt[fjet],fabs(pfjetAK4eta[fjet]),weight); }
     if(abs(pfjetAK4hadronflav[fjet])==4){ hist_2D_ball_flavc->Fill(pfjetAK4pt[fjet],fabs(pfjetAK4eta[fjet]),weight); }
     if(abs(pfjetAK4hadronflav[fjet])!=5 &&abs(pfjetAK4hadronflav[fjet])!=4){  hist_2D_ball_flavq->Fill(pfjetAK4pt[fjet],fabs(pfjetAK4eta[fjet]),weight); }
-    
+    */
     if(pfjetAK4btag_DeepFlav[fjet] > deep_btag_cut) { nbjetAK4++;
       TLorentzVector bv;
       bv.SetPtEtaPhiM(pfjetAK4pt[fjet],pfjetAK4y[fjet],pfjetAK4phi[fjet],pfjetAK4mass[fjet]);
@@ -816,22 +862,22 @@ Bool_t Anal_Leptop_PROOF::Process(Long64_t entry)
   npfjetAK4 = fjet;
   //*****//
   
-  /*  int nmuon1 = 0;
+   int nmuon1 = 0;
   for(int mu=0; mu<nmuons; mu++){
     
     if(muonpt[mu]<25.) continue; 
     
     if(fabs(muoneta[mu])>2.5)  continue; 
-    bool mu_id = Muon_TightID(muonisGL[mu],muonisPF[mu],
+     bool mu_id = Muon_TightID(muonisGL[mu],muonisPF[mu],
 			      muonchi[mu],muonhit[mu],muonmst[mu],
 			      muontrkvtx[mu],muondz[mu],muonpixhit[mu],muontrklay[mu]);
-    bool mu_iso = Muon_Iso_ID(muonpfiso[mu]);
+     // bool mu_iso = Muon_Iso_ID(muonpfiso[mu]);
     
     if(!mu_id) continue;
     //if(!mu_iso) continue;
     
      //2d iso //
-    float dR_min = 1000;
+    /*    float dR_min = 1000;
     int nearjet = -1;
     
     for(int kjet=0; kjet<npfjetAK4; kjet++){
@@ -851,7 +897,7 @@ Bool_t Anal_Leptop_PROOF::Process(Long64_t entry)
       muonpt_nearjet = ((mu_mom.Vect()).Perp(j_mom.Vect()));
     }
     bool mu_2diso = (nearjet>=0)?(dR_min > 0.4 ||  muonpt_nearjet > 15.):true;
-    
+    */
     //2d iso ends//
     //#ifdef E_MU_TTBar
     //if(!mu_iso) continue;
@@ -868,14 +914,14 @@ Bool_t Anal_Leptop_PROOF::Process(Long64_t entry)
     nmuon1++;
     if(nmuon1 >= njetmx) break;
   }
-  
+ 
   nmuons = nmuon1;
-  */  
+    
   for(int ijet=0; ijet<npfjetAK8; ijet++){
     
-    if(!pfjetAK8jetID[ijet]) continue;
+     if(!pfjetAK8jetID[ijet]) continue;
 
-    if(fabs(pfjetAK8y[ijet])>2.5) continue;
+    if(fabs(pfjetAK8eta[ijet])>2.5) continue;
     
     pfjetAK8pt[ijet] *= pfjetAK8JEC[ijet] ;
     pfjetAK8mass[ijet] *= pfjetAK8JEC[ijet];
@@ -907,6 +953,7 @@ Bool_t Anal_Leptop_PROOF::Process(Long64_t entry)
     pfjetAK8pt[fjet] = pfjetAK8pt[ijet];
     pfjetAK8mass[fjet] = pfjetAK8mass[ijet];
     pfjetAK8y[fjet] = pfjetAK8y[ijet];
+    pfjetAK8eta[fjet] = pfjetAK8eta[ijet];
     pfjetAK8phi[fjet] = pfjetAK8phi[ijet];
     pfjetAK8chrad[fjet] = pfjetAK8chrad[ijet];
     /*    pfjetAK8tau21[fjet] = pfjetAK8tau2[ijet]*1./pfjetAK8tau1[ijet];
@@ -1123,7 +1170,7 @@ Bool_t Anal_Leptop_PROOF::Process(Long64_t entry)
       }
     }
   }
-  
+  */  
   int nelec1 = 0;
   for(int ie=0; ie<nelecs; ie++) {
     if (elpt[ie]<25.) continue;
@@ -1146,7 +1193,7 @@ Bool_t Anal_Leptop_PROOF::Process(Long64_t entry)
     
   }
   nelecs = nelec1;
-   
+/*   
   hist_npv_nopuwt->Fill(nprimi,weight);
   
   if(isMC){
@@ -1548,53 +1595,338 @@ Bool_t Anal_Leptop_PROOF::Process(Long64_t entry)
   
   /// For delR( reco bjet, reco AK8 jet) plot
   float delRmin;
-  if(nbjetAK4 == 1)
+  float tmp;
+  std::vector<TLorentzVector> matchedbjv;
+  float matchedeleta[nelecs],matchedelphi[nelecs];
+  float matchedmuoneta[nelecs],matchedmuonphi[nelecs];
+  int nmatchedbjetAK4=0;
+  int nmatchedelecs=0;
+  int nmatchedmuons=0;
+  float matchedpfjetAK8eta[npfjetAK8],matchedpfjetAK8phi[npfjetAK8];
+  int nmatchedpfjetAK8=0;
+  if(npfjetAK8>0)
     {
-      delRmin=1000.;
-      for(int ijet=0; ijet<npfjetAK8; ijet++)
-	{
-	  float tmp;
-	  tmp = delta2R(pfjetAK8y[ijet],pfjetAK8phi[ijet],bjv[0].Eta(),bjv[0].Phi());
-	  if(tmp<delRmin)
-	    delRmin=tmp;
-	}
-      hist_nbjetR[0]->Fill(delRmin,weight); 
-    }
-  if(nbjetAK4 == 2)
-    {
-      for(int ib=0;ib<nbjetAK4;ib++)
+      if(nbjetAK4 == 1)
 	{
 	  delRmin=1000.;
 	  for(int ijet=0; ijet<npfjetAK8; ijet++)
 	    {
-	      float tmp;
-	      tmp = delta2R(pfjetAK8y[ijet],pfjetAK8phi[ijet],bjv[ib].Eta(),bjv[ib].Phi());
+	      tmp = delta2R(pfjetAK8eta[ijet],pfjetAK8phi[ijet],bjv[0].Rapidity(),bjv[0].Phi());
 	      if(tmp<delRmin)
 		delRmin=tmp;
 	    }
-	  hist_nbjetR[1]->Fill(delRmin,weight);
+	  if(delRmin <10)  hist_nbjetR[0]->Fill(delRmin,weight); 
 	}
-    }
-  //  gProofServ->SendAsynMessage("Check 3");
-    if(nbjetAK4 > 2)
-    {
-      for(int ib=0;ib<nbjetAK4;ib++)
+      if(nbjetAK4 == 2)
+	{
+	  for(int ib=0;ib<nbjetAK4;ib++)
+	    {
+	      delRmin=1000.;
+	      for(int ijet=0; ijet<npfjetAK8; ijet++)
+		{
+		  tmp = delta2R(pfjetAK8eta[ijet],pfjetAK8phi[ijet],bjv[ib].Rapidity(),bjv[ib].Phi());
+		  if(tmp<delRmin)
+		    delRmin=tmp;
+		}
+	      hist_nbjetR[1]->Fill(delRmin,weight);
+	    }
+	}
+      //  gProofServ->SendAsynMessage("Check 3");
+      if(nbjetAK4 > 2)
+	{
+	  for(int ib=0;ib<nbjetAK4;ib++)
+	    {
+	      delRmin=1000.;
+	      for(int ijet=0; ijet<npfjetAK8; ijet++)
+		{
+		  tmp = delta2R(pfjetAK8eta[ijet],pfjetAK8phi[ijet],bjv[ib].Rapidity(),bjv[ib].Phi());
+		  if(tmp<delRmin)
+		    delRmin=tmp;
+		}
+	      hist_nbjetR[2]->Fill(delRmin,weight);
+	    }
+	}
+
+      //      gProofServ->SendAsynMessage("Check 4");
+      if(nelecs+nmuons==1)
+	{
+	  for(int ie=0;ie<nelecs;ie++)
+	    {
+	      delRmin=1000.;
+	      for(int ijet=0; ijet<npfjetAK8; ijet++)
+		{
+		  tmp = delta2R(pfjetAK8eta[ijet],pfjetAK8phi[ijet],eleta[ie],elphi[ie]);
+		  if(tmp<delRmin)
+		    delRmin=tmp;
+		}
+	      hist_nlepR[0]->Fill(delRmin,weight);
+	    }
+	  for(int im=0;im<nmuons;im++)
+	    {
+	      delRmin=1000.;
+	      for(int ijet=0; ijet<npfjetAK8; ijet++)
+		{
+		  tmp = delta2R(pfjetAK8eta[ijet],pfjetAK8phi[ijet],muoneta[im],muonphi[im]);
+		  if(tmp<delRmin)
+		    delRmin=tmp;
+		}
+	      hist_nlepR[0]->Fill(delRmin,weight);
+	    }
+	}
+      if(nelecs+nmuons==2)
+	{
+	  for(int ie=0;ie<nelecs;ie++)
+	    {
+	      delRmin=1000.;
+	      for(int ijet=0; ijet<npfjetAK8; ijet++)
+		{
+		  tmp = delta2R(pfjetAK8eta[ijet],pfjetAK8phi[ijet],eleta[ie],elphi[ie]);
+		  if(tmp<delRmin)
+		    delRmin=tmp;
+		}
+	      hist_nlepR[1]->Fill(delRmin,weight);
+	    }
+	  for(int im=0;im<nmuons;im++)
+	    {
+	      delRmin=1000.;
+	      for(int ijet=0; ijet<npfjetAK8; ijet++)
+		{
+		  tmp = delta2R(pfjetAK8eta[ijet],pfjetAK8phi[ijet],muoneta[im],muonphi[im]);
+		  if(tmp<delRmin)
+		    delRmin=tmp;
+		}
+	      hist_nlepR[1]->Fill(delRmin,weight);
+	    }
+	}
+      if(nelecs+nmuons>2)
+	{
+	  for(int ie=0;ie<nelecs;ie++)
+	    {
+	      delRmin=1000.;
+	      for(int ijet=0; ijet<npfjetAK8; ijet++)
+		{
+		  tmp = delta2R(pfjetAK8eta[ijet],pfjetAK8phi[ijet],eleta[ie],elphi[ie]);
+		  if(tmp<delRmin)
+		    delRmin=tmp;
+		}
+	      hist_nlepR[2]->Fill(delRmin,weight);
+	    }
+	  for(int im=0;im<nmuons;im++)
+	    {
+	      delRmin=1000.;
+	      for(int ijet=0; ijet<npfjetAK8; ijet++)
+		{
+		  tmp = delta2R(pfjetAK8eta[ijet],pfjetAK8phi[ijet],muoneta[im],muonphi[im]);
+		  if(tmp<delRmin)
+		    delRmin=tmp;
+		}
+	      hist_nlepR[2]->Fill(delRmin,weight);
+	    }
+	} 
+      //gProofServ->SendAsynMessage("Check 5");
+      for(int i=0;i<nbjetAK4;i++)
 	{
 	  delRmin=1000.;
-	  for(int ijet=0; ijet<npfjetAK8; ijet++)
+	  for(int j=0; j<ngenbs; j++)
 	    {
-	      float tmp;
-	      tmp = delta2R(pfjetAK8y[ijet],pfjetAK8phi[ijet],bjv[ib].Eta(),bjv[ib].Phi());
+	      tmp = delta2R(bjv[i].Rapidity(),bjv[i].Phi(),genbeta[j],genbphi[j]);
+	      if(tmp<delRmin)
+		delRmin=tmp;
+	    } 
+	  hist_minmatchedR[0]->Fill(delRmin,weight);
+	  if(delRmin <0.2)
+	    {
+	      nmatchedbjetAK4++;
+	      matchedbjv.push_back(bjv[i]);
+	    }
+	  
+	}
+      //      gProofServ->SendAsynMessage("Check 6");
+      for(int i=0;i<nelecs;i++)
+	{
+	  delRmin=1000.;
+	  for(int j=0; j<ngenelectrons; j++)
+	    {
+	      tmp = delta2R(eleta[i],elphi[i],genelectroneta[j],genelectronphi[j]);
+	      if(tmp<delRmin)
+		delRmin=tmp;
+	    } 
+	  hist_minmatchedR[1]->Fill(delRmin,weight);
+	  if(delRmin <0.1)
+	    {
+	      matchedeleta[nmatchedelecs] = eleta[i];
+	      matchedelphi[nmatchedelecs] = elphi[i];
+	      nmatchedelecs++;
+	    }
+	  
+	}
+      for(int i=0;i<nmuons;i++)
+	{
+	  delRmin=1000.;
+	  for(int j=0; j<ngenmuons; j++)
+	    {
+	      tmp = delta2R(muoneta[i],muonphi[i],genmuoneta[j],genmuonphi[j]);
+	      if(tmp<delRmin)
+		delRmin=tmp;
+	    } 
+	  hist_minmatchedR[1]->Fill(delRmin,weight);
+	  if(delRmin<0.1)
+	    {
+	      matchedmuoneta[nmatchedmuons] = muoneta[i];
+	      matchedmuonphi[nmatchedmuons] = muonphi[i];
+	      nmatchedmuons++;
+	    }
+	  
+	}
+      //      gProofServ->SendAsynMessage("Check 7");
+      for(int i=0;i<npfjetAK8;i++)
+	{
+	  delRmin=1000.;
+	  for(int j=0; j<ngentops; j++)
+	    {
+	      tmp = delta2R(pfjetAK8eta[i],pfjetAK8phi[i],gentopeta[j],gentopphi[j]);
+	      if(tmp<delRmin)
+		delRmin=tmp;
+	    } 
+	  hist_minmatchedR[2]->Fill(delRmin,weight);
+	  if(delRmin <0.3)
+	    {
+	      matchedpfjetAK8eta[nmatchedpfjetAK8]=pfjetAK8eta[i];
+	      matchedpfjetAK8phi[nmatchedpfjetAK8]=pfjetAK8phi[i];
+	      nmatchedpfjetAK8++;
+	    }
+	  
+	}
+      //gProofServ->SendAsynMessage("Check 8");
+    }
+  if(nmatchedpfjetAK8>0)
+    {
+      if(nmatchedbjetAK4 == 1)
+	{
+	  delRmin=1000.;
+	  for(int ijet=0; ijet<nmatchedpfjetAK8; ijet++)
+	    {
+	      float tmp; 
+	      tmp = delta2R(matchedpfjetAK8eta[ijet],matchedpfjetAK8phi[ijet],matchedbjv[0].Rapidity(),matchedbjv[0].Phi());
 	      if(tmp<delRmin)
 		delRmin=tmp;
 	    }
-	  hist_nbjetR[2]->Fill(delRmin,weight);
+	  hist_nbjetR[3]->Fill(delRmin,weight); 
 	}
+      
+      if(nmatchedbjetAK4 == 2)
+	{
+	  for(int ib=0;ib<nmatchedbjetAK4;ib++)
+	    {
+	      delRmin=1000.;
+	      for(int ijet=0; ijet<nmatchedpfjetAK8; ijet++)
+		{
+		  float tmp;
+		  tmp = delta2R(matchedpfjetAK8eta[ijet],matchedpfjetAK8phi[ijet],matchedbjv[ib].Rapidity(),matchedbjv[ib].Phi());
+		  if(tmp<delRmin)
+		    delRmin=tmp;
+		}
+	      hist_nbjetR[4]->Fill(delRmin,weight);
+	    }
+	}
+      //  gProofServ->SendAsynMessage("Check 3");
+      if(nmatchedbjetAK4 > 2)
+	{
+	  for(int ib=0;ib<nmatchedbjetAK4;ib++)
+	    {
+	      delRmin=1000.;
+	      for(int ijet=0; ijet<nmatchedpfjetAK8; ijet++)
+		{
+		  float tmp;
+		  tmp = delta2R(matchedpfjetAK8eta[ijet],matchedpfjetAK8phi[ijet],matchedbjv[ib].Rapidity(),matchedbjv[ib].Phi());
+		  if(tmp<delRmin)
+		    delRmin=tmp;
+		}
+	      hist_nbjetR[5]->Fill(delRmin,weight);
+	    }
+	}
+
+      if(nmatchedelecs+nmatchedmuons==1)
+	{
+	  for(int ie=0;ie<nmatchedelecs;ie++)
+	    {
+	      delRmin=1000.;
+	      for(int ijet=0; ijet<nmatchedpfjetAK8; ijet++)
+		{
+		  tmp = delta2R(matchedpfjetAK8eta[ijet],matchedpfjetAK8phi[ijet],matchedeleta[ie],matchedelphi[ie]);
+		  if(tmp<delRmin)
+		    delRmin=tmp;
+		}
+	      hist_nlepR[3]->Fill(delRmin,weight);
+	    }
+	  for(int im=0;im<nmatchedmuons;im++)
+	    {
+	      delRmin=1000.;
+	      for(int ijet=0; ijet<nmatchedpfjetAK8; ijet++)
+		{
+		  tmp = delta2R(matchedpfjetAK8eta[ijet],matchedpfjetAK8phi[ijet],matchedmuoneta[im],matchedmuonphi[im]);
+		  if(tmp<delRmin)
+		    delRmin=tmp;
+		}
+	      hist_nlepR[3]->Fill(delRmin,weight);
+	    }
+	}
+      if(nmatchedelecs+nmatchedmuons==2)
+	{
+	  for(int ie=0;ie<nmatchedelecs;ie++)
+	    {
+	      delRmin=1000.;
+	      for(int ijet=0; ijet<nmatchedpfjetAK8; ijet++)
+		{
+		  tmp = delta2R(matchedpfjetAK8eta[ijet],matchedpfjetAK8phi[ijet],matchedeleta[ie],matchedelphi[ie]);
+		  if(tmp<delRmin)
+		    delRmin=tmp;
+		}
+	      hist_nlepR[4]->Fill(delRmin,weight);
+	    }
+	  for(int im=0;im<nmatchedmuons;im++)
+	    {
+	      delRmin=1000.;
+	      for(int ijet=0; ijet<nmatchedpfjetAK8; ijet++)
+		{
+		  tmp = delta2R(matchedpfjetAK8eta[ijet],matchedpfjetAK8phi[ijet],matchedmuoneta[im],matchedmuonphi[im]);
+		  if(tmp<delRmin)
+		    delRmin=tmp;
+		}
+	      hist_nlepR[4]->Fill(delRmin,weight);
+	    }
+	}
+      if(nmatchedelecs+nmatchedmuons>2)
+	{
+	  for(int ie=0;ie<nmatchedelecs;ie++)
+	    {
+	      delRmin=1000.;
+	      for(int ijet=0; ijet<nmatchedpfjetAK8; ijet++)
+		{
+		  tmp = delta2R(matchedpfjetAK8eta[ijet],matchedpfjetAK8phi[ijet],matchedeleta[ie],matchedelphi[ie]);
+		  if(tmp<delRmin)
+		    delRmin=tmp;
+		}
+	      hist_nlepR[5]->Fill(delRmin,weight);
+	    }
+	  for(int im=0;im<nmatchedmuons;im++)
+	    {
+	      delRmin=1000.;
+	      for(int ijet=0; ijet<nmatchedpfjetAK8; ijet++)
+		{
+		  tmp = delta2R(matchedpfjetAK8eta[ijet],matchedpfjetAK8phi[ijet],matchedmuoneta[im],matchedmuonphi[im]);
+		  if(tmp<delRmin)
+		    delRmin=tmp;
+		}
+	      hist_nlepR[5]->Fill(delRmin,weight);
+	    }
+	} 
     }
-   
+  //gProofServ->SendAsynMessage("Check 9");
+  
   // event selection starts
   
-    /*      if (nprimi<1) return kFALSE;  
+  /*      if (nprimi<1) return kFALSE;  
   hist_count->Fill(1,weight);
   
   std::vector<std::pair<float,TLorentzVector> > leptoncoll;

@@ -1060,6 +1060,7 @@ class Anal_Leptop_PROOF : public TSelector {
   Bool_t          pfjetAK8jetID_tightlepveto [njetmxAK8];
   Float_t         pfjetAK8pt[njetmxAK8];
   Float_t         pfjetAK8y[njetmxAK8];
+  Float_t         pfjetAK8eta[njetmxAK8];
   Float_t         pfjetAK8phi[njetmxAK8];
   Float_t         pfjetAK8mass[njetmxAK8];
   Float_t         pfjetAK8JEC[njetmxAK8];
@@ -1436,6 +1437,7 @@ class Anal_Leptop_PROOF : public TSelector {
    TBranch        *b_pfjetAK8jetID_tightlepveto;   //!
    TBranch        *b_pfjetAK8pt;   //!
    TBranch        *b_pfjetAK8y;   //!
+   TBranch        *b_pfjetAK8eta;   //!
    TBranch        *b_pfjetAK8phi;   //!
    TBranch        *b_pfjetAK8mass;   //!
    TBranch        *b_pfjetAK8JEC;   //!
@@ -2037,31 +2039,47 @@ class Anal_Leptop_PROOF : public TSelector {
   TH1D *hist_npv_nopuwt;
 
 
-  TH1D *hist_new_var[26];
+  TH1D *hist_new_var[28];
 
-  const char *new_var_names[26] = {"hist_genMET","hist_phi(genlep1)","hist_phi(genlep2)","hist_phi(genMET)","hist_HT(AK4jets)","hist_pT(genlep1)","hist_pT(genlep2)","hist_pT(genjetAK4)", "hist_pT(gen_b)","hist_deltaPhi(genMET,genlep1)","hist_deltaPhi(genMET,genlep2)","hist_deltaPhi(genMET,genjetAK4)","hist_deltaPhi(genMET,gen_b)","hist_mT(genlep1+MET)","hist_mT(genlep2+MET)","hist_R_(genMET,genAK4)","hist_R_(genMET,genHT)","hist_R_(genMET,genAK8)","hist_deltaPhi(genMET,genlep1+genb)","hist_deltaPhi(genMET,genlep2+genb)","hist_ngenlep","hist_ngenAK4","hist_pt(AK4jets)","hist_R_(genlep2,genlep1)","hist_deltaPhi(genlep1,genlep2)","hist_inv_mass_(genlep1,genlep2)"};
+  const char *new_var_names[28] = {"hist_genMET","hist_phi(genlep1)","hist_phi(genlep2)","hist_phi(genMET)","hist_HT(AK4jets)","hist_pT(genlep1)","hist_pT(genlep2)","hist_pT(genjetAK4)", "hist_pT(gen_b)","hist_deltaPhi(genMET,genlep1)","hist_deltaPhi(genMET,genlep2)","hist_deltaPhi(genMET,genjetAK4)","hist_deltaPhi(genMET,gen_b)","hist_mT(genlep1+MET)","hist_mT(genlep2+MET)","hist_R_(genMET,genAK4)","hist_R_(genMET,genHT)","hist_R_(genMET,genAK8)","hist_deltaPhi(genMET,genlep1+genb)","hist_deltaPhi(genMET,genlep2+genb)","hist_ngenlep","hist_ngenAK4","hist_pt(AK4jets)","hist_R_(genlep2,genlep1)","hist_deltaPhi(genlep1,genlep2)","hist_inv_mass_(genlep1,genlep2)","hist_ngenAK8","hist_ntopmatchedgenAK8"};
 
-  const char *new_var_title[26] = {"gen MET","#phi of leading gen lep","#phi of second leading gen lep","#phi(gen E^{mis}_{T})","H_{T} of AK4 jets","p_{T} of leading gen lep","p_{T} of second leading gen lep","p_{T} of leading gen AK4 jet", "p_{T} of leading gen b","#Delta#phi between gen MET and leading gen lep","#Delta#phi between MET and second leading gen lep","#Delta#phi between gen MET and leading gen AK4 jet","#Delta#phi between gen MET and leading gen b","m^{leading gen lep + MET}_{T}","m^{second leading gen lep + MET}_{T}","Ratio of MET to pt of leading AK4 jet","Ratio of MET to Event H_{T}","Ratio of MET to pt of leading AK8 jet","#Delta#phi between gen MET and (leading gen lep + nearest gen b quark)","#Delta#phi between gen MET and (second leading gen lep + nearest gen b quark)","No of gen leptons ","No of gen AK4 jets","p_{t} sum of AK4 jets","Ratio of p_{t} of second leading gen lep to pt of leading gen lep","#Delta#phi between leading gen lep and second leading gen lep","Invariant mass of leading and second leading gen leptons"};
-
-
-  double new_var_low[26] = {0,-3.142,-3.142,-3.142,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-0.5,-0.5,0,0,0,0};
-  double new_var_up[26] = {600,3.142,3.142,3.142,1600,500,500,1000,500,3.142,3.142,3.142,3.142,500,500,4,3,3,3.142,3.142,9.5,15.5,1600,1,3.142,500};
-  int new_var_nbins[26] = {30,25,25,25,30,25,25,30,25,25,25,25,25,25,25,25,25,25,25,25,10,16,25,30,25,25};
-
-  TH1D *hist_nbjetR[3];
-
-  const char *nbjetR_names[3] = {"bjetdelR1","bjetdelR2","bjetdelR3"};
-
-  const char *nbjetR_title[3] = {"#DeltaR(bjet,AK8) when nbjet = 1","#DeltaR(bjet,AK8) when nbjet = 2","#DeltaR(bjet,AK8) when nbjet >=3"};
-
-  TH2D *hist_2D_gendeltaRvstoppt;
-  TH2D *hist_2D_gendeltaRvsantitoppt;
-  TH2D *hist_2D_gendeltaRvsbothtoppt;
+  const char *new_var_title[28] = {"gen MET","#phi of leading gen lep","#phi of second leading gen lep","#phi(gen E^{mis}_{T})","H_{T} of AK4 jets","p_{T} of leading gen lep","p_{T} of second leading gen lep","p_{T} of leading gen AK4 jet", "p_{T} of leading gen b","#Delta#phi between gen MET and leading gen lep","#Delta#phi between MET and second leading gen lep","#Delta#phi between gen MET and leading gen AK4 jet","#Delta#phi between gen MET and leading gen b","m^{leading gen lep + MET}_{T}","m^{second leading gen lep + MET}_{T}","Ratio of MET to pt of leading AK4 jet","Ratio of MET to Event H_{T}","Ratio of MET to pt of leading AK8 jet","#Delta#phi between gen MET and (leading gen lep + nearest gen b quark)","#Delta#phi between gen MET and (second leading gen lep + nearest gen b quark)","No of gen leptons ","No of gen AK4 jets","p_{t} sum of AK4 jets","Ratio of p_{t} of second leading gen lep to pt of leading gen lep","#Delta#phi between leading gen lep and second leading gen lep","Invariant mass of leading and second leading gen leptons","No of gen AK8 jets","No of gen top matched gen AK8 jets"};
 
 
-  double nbjetR_low[3] = {0,0,0};
-  double nbjetR_up[3] = {6.5,6.5,6.5};
-  int nbjetR_nbins[3] = {30,30,30};
+  double new_var_low[28] = {0,-3.142,-3.142,-3.142,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-0.5,-0.5,0,0,0,0,-0.5,-0.5};
+  double new_var_up[28] = {1000,3.142,3.142,3.142,2000,500,500,1000,500,3.142,3.142,3.142,3.142,500,500,3,2,2.5,3.142,3.142,9.5,15.5,1600,1,3.142,500,9.5,9.5};
+  int new_var_nbins[28] = {30,25,25,25,30,25,25,30,25,25,25,25,25,25,25,25,25,25,25,25,10,16,25,30,25,25,10,10};
+
+  TH1D *hist_nbjetR[6];
+  const char *nbjetR_names[6] = {"bjetdelR1","bjetdelR2","bjetdelR3","matchedbjetdelR1","matchedbjetdelR2","matchedbjetdelR3"};
+  const char *nbjetR_title[6] = {"#DeltaR(reco bjet, reco AK8) when nbjet = 1","#DeltaR(reco bjet, reco AK8) when nbjet = 2","#DeltaR(reco bjet,reco AK8) when nbjet >=3","#DeltaR(matched bjet,matched top AK8) when nmatchedbjet = 1","#DeltaR(matched bjet,matched top AK8) when nmatchedbjet = 2","#DeltaR(matched bjet,matched top AK8) when nmatchedbjet >=3"};
+
+    double nbjetR_low[6] = {0,0,0,0,0,0};
+  double nbjetR_up[6] = {6.5,6.5,6.5,6.5,6.5,6.5};
+  int nbjetR_nbins[6] = {35,35,35,35,35,35};
+
+      TH1D *hist_nlepR[6];
+  const char *nlepR_names[6] = {"lepdelR1","lepdelR2","lepdelR3","matchedlepdelR1","matchedlepdelR2","matchedlepdelR3"};
+  const char *nlepR_title[6] = {"#DeltaR(reco lep,reco AK8) when nlep = 1","#DeltaR(reco lep,reco AK8) when nlep = 2","#DeltaR(reco lep,reco AK8) when nlep >=3","#DeltaR(matched lep,matched top AK8) when nmatchedlep = 1","#DeltaR(matched lep,matched top AK8) when nmatchedlep = 2","#DeltaR(matched lep,matched top AK8) when nmatchedlep >=3"};
+
+    double nlepR_low[6] = {0,0,0,0,0,0};
+  double nlepR_up[6] = {6.5,6.5,6.5,6.5,6.5,6.5};
+  int nlepR_nbins[6] = {35,35,35,35,35,35};
+
+
+    TH1D *hist_minmatchedR[3];
+  const char *minmatchedR_names[3] = {"matchedbdelR","matchedlepdelR","matchedtopdelR"};
+  const char *minmatchedR_title[3] = {"min #DeltaR(gen b,reco b jet) for every reco b jet","min #DeltaR(gen lep, reco lep) for every reco lep","min #DeltaR(gen top, reco AK8) for every reco AK8 jet"};
+
+    double minmatchedR_low[3] = {0,0,0};
+  double minmatchedR_up[3] = {1,0.25,5};
+  int minmatchedR_nbins[3] = {80,80,80};
+
+
+  TH2D *hist_2D_gendeltaRblepvstoppt;
+  TH2D *hist_2D_gendeltaRbtopvstoppt;
+  TH2D *hist_2D_gendeltaRleptopvstoppt;
+
 
   TH1D *hist_event_count;
   
@@ -2207,10 +2225,11 @@ void Anal_Leptop_PROOF::Init(TTree *tree)
    fChain->SetBranchAddress("MisEtSig", &MisEtSig, &b_misetsig);
    fChain->SetBranchAddress("sumEt", &sumEt, &b_sumEt);
    fChain->SetBranchAddress("npfjetAK8", &npfjetAK8, &b_npfjetAK8);
-   fChain->SetBranchAddress("pfjetAK8jetID_tightlepveto", pfjetAK8jetID_tightlepveto, &b_pfjetAK8jetID_tightlepveto);
+//    fChain->SetBranchAddress("pfjetAK8jetID_tightlepveto", pfjetAK8jetID_tightlepveto, &b_pfjetAK8jetID_tightlepveto);
    fChain->SetBranchAddress("pfjetAK8jetID", pfjetAK8jetID, &b_pfjetAK8jetID);
    fChain->SetBranchAddress("pfjetAK8pt", pfjetAK8pt, &b_pfjetAK8pt);
    fChain->SetBranchAddress("pfjetAK8y", pfjetAK8y, &b_pfjetAK8y);
+   fChain->SetBranchAddress("pfjetAK8eta", pfjetAK8eta, &b_pfjetAK8eta);
    fChain->SetBranchAddress("pfjetAK8phi", pfjetAK8phi, &b_pfjetAK8phi);
    fChain->SetBranchAddress("pfjetAK8mass", pfjetAK8mass, &b_pfjetAK8mass);
    fChain->SetBranchAddress("pfjetAK8JEC", pfjetAK8JEC, &b_pfjetAK8JEC);
